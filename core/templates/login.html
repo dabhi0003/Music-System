@@ -1,0 +1,121 @@
+{% load socialaccount %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+        
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        
+        .register-link,
+        .google-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .register-link a {
+            text-decoration: none;
+            color: #555;
+        }
+        
+        .google-login button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #fff;
+            border: 1px solid #4285F4;
+            border-radius: 3px;
+            color: #4285F4;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .google-login button:hover {
+            background-color: #4285F4;
+            color: #fff;
+        }
+        
+        .google-login button i {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login Page</h1>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <label for="id_username">Username</label>
+            <input type="text" name="username" id="id_username">
+            <label for="id_password">Password</label>
+            <input type="password" name="password" id="id_password">
+            <button type="submit">Submit</button>
+        </form>
+        <div class="register-link">
+            <a href="/register/">Don't have an account? Register here</a>
+        </div>
+        <div class="google-login">
+            <button>
+                <a href="{% provider_login_url 'google' %}?next=/home/">
+                    <i class="fab fa-google"></i>Login with Google
+                </a>
+            </button>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

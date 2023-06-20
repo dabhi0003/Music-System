@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Add Song</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="">Music:</label>
+        <input type="file" name="music" required><br>
+        <label for="">Name:</label>
+        <input type="text" name="name" required><br>
+        <button type="submit">Upload Song</button>
+    </form>
+    
+</body>
+</html>

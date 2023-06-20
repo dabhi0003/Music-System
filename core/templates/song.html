@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        audio {
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        button[type="submit"],
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button[type="submit"]:hover,
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .song-controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .song-controls button {
+            margin-right: 10px;
+        }
+        
+        .back-link {
+            text-align: center;
+        }
+        
+        .back-link a {
+            text-decoration: none;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="songName">{{ song.name }}</h1>
+        <audio id="audioPlayer" controls>
+            <source src="{{ song.music.url }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        {% if song.name not in l1 %}
+        <form method="post" action="{% url 'add-to-favorite' song.id %}">
+            {% csrf_token %}
+            <button type="submit">Add to Favorite</button>
+        </form>
+        {% elif song.name in l1 %}
+        <button><a href="/remove-favorite/{{ song_id }}/">Remove From Favorite</a></button>
+        {% endif %}
+
+        <div class="song-controls">
+            <button onclick="stopPlayback()">Stop</button>
+            <button onclick="playPlayback()">Play</button>
+            <button onclick="nextSong()">Next</button>
+            <button onclick="previousSong()">Previous</button>
+        </div>
+
+        <div class="back-link">
+            <a href="/home/">Back to song list</a>
+        </div>
+    </div>
+
+    <script>
+        var audio = document.getElementById('audioPlayer');
+        var playbackPosition = 0;
+        var songs = [
+            {% for song in song_list %}
+                {
+                    "url": "{{ song.music.url }}",
+                    "name": "{{ song.name }}"
+                },
+            {% endfor %}
+        ];
+        var currentSongIndex = {{ song_index }};
+        var songNameElement = document.getElementById('songName');
+
+        function stopPlayback() {
+            audio.pause();
+            playbackPosition = audio.currentTime;
+        }
+
+        function playPlayback() {
+            audio.currentTime = playbackPosition;
+            audio.play();
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length; 
+            audio.src = songs[currentSongIndex].url;
+            audio.play();
+            updateSongName();
+        }
+
+        function previousSong() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;  
+            audio.src = songs[currentSongIndex].url;
+            audio.play();
+            updateSongName();
+        }
+
+        function updateSongName() {
+            songNameElement.textContent = songs[currentSongIndex].name;
+        }
+    </script>
+</body>
+</html>

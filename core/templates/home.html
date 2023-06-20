@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #555;
+        }
+        
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Music System</h1>
+    <h1>{{ request.user.username }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th><h3>Music List</h3></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for song in songs %}
+                <tr>
+                    <td><a href="/song/{{ song.id }}/" data-index="{{ forloop.counter0 }}">{{ song.name }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if request.user.is_superuser %}
+    <button><a href="/add-song/">Add Song</a></button>
+    {% endif %}
+    <button><a href="/logout/">Logout</a></button>
+    <button><a href="/favoirite/">Favorite Song</a></button>
+</body>
+</html>
